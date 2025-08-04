@@ -4,16 +4,293 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Find Github User</title>
+    <title>GitHub User Finder</title>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+        }
+        
+        .hero-section {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            padding: 3rem 2rem;
+            margin: 2rem 0;
+        }
+        
+        .search-container {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 2rem;
+            margin: 2rem 0;
+        }
+        
+        .search-input {
+            border: 2px solid #e9ecef;
+            border-radius: 10px;
+            padding: 12px 20px;
+            font-size: 1.1rem;
+            transition: all 0.3s ease;
+        }
+        
+        .search-input:focus {
+            border-color: #667eea;
+            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+        }
+        
+        .search-btn {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border: none;
+            border-radius: 10px;
+            padding: 12px 30px;
+            font-weight: 600;
+            transition: all 0.3s ease;
+        }
+        
+        .search-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+        }
+        
+        .result-card {
+            background: white;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+        
+        .result-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        }
+        
+        .user-avatar {
+            width: 120px;
+            height: 120px;
+            border-radius: 50%;
+            border: 4px solid #667eea;
+            object-fit: cover;
+        }
+        
+        .stats-card {
+            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
+            color: white;
+            border-radius: 10px;
+            padding: 1rem;
+            text-align: center;
+        }
+        
+        .stats-card h3 {
+            margin: 0;
+            font-size: 1.5rem;
+            font-weight: 700;
+        }
+        
+        .stats-card p {
+            margin: 0;
+            opacity: 0.9;
+        }
+        
+        .github-link {
+            background: #24292e;
+            color: white;
+            text-decoration: none;
+            padding: 10px 20px;
+            border-radius: 8px;
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            transition: all 0.3s ease;
+        }
+        
+        .github-link:hover {
+            background: #000;
+            color: white;
+            transform: translateY(-2px);
+        }
+        
+        .loading-spinner {
+            display: none;
+        }
+        
+        .error-message {
+            background: #f8d7da;
+            color: #721c24;
+            border: 1px solid #f5c6cb;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+        
+        .success-message {
+            background: #d4edda;
+            color: #155724;
+            border: 1px solid #c3e6cb;
+            border-radius: 10px;
+            padding: 1rem;
+            margin: 1rem 0;
+        }
+    </style>
 </head>
 
 <body>
-    <h1>Find Github User</h1>
-    <form action="/" method="post">
-        <input type="text" name="username" placeholder="Enter Github Username">
-        <button type="submit">Search</button>
-    </form>
-    <div id="result"></div>
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section text-center text-white">
+            <div class="row justify-content-center">
+                <div class="col-lg-8">
+                    <i class="fab fa-github fa-3x mb-3"></i>
+                    <h1 class="display-4 fw-bold mb-3">GitHub User Finder</h1>
+                    <p class="lead mb-0">Discover GitHub users and explore their profiles, repositories, and contributions</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Search Section -->
+        <div class="search-container">
+            <form action="/" method="post" id="searchForm">
+                <div class="row justify-content-center">
+                    <div class="col-lg-8">
+                        <div class="input-group input-group-lg">
+                            <span class="input-group-text bg-transparent border-end-0">
+                                <i class="fas fa-search text-muted"></i>
+                            </span>
+                            <input type="text" class="form-control search-input border-start-0" name="username" placeholder="Enter GitHub username (e.g., octocat)" required>
+                            <button class="btn search-btn text-white" type="submit">
+                                <i class="fas fa-search me-2"></i>Search
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </div>
+
+        <!-- Loading Spinner -->
+        <div class="text-center loading-spinner" id="loadingSpinner">
+            <div class="spinner-border text-primary" role="status">
+                <span class="visually-hidden">Loading...</span>
+            </div>
+            <p class="mt-2 text-white">Searching for user...</p>
+        </div>
+
+        <!-- Error Message -->
+        {% if error %}
+        <div class="error-message text-center">
+            <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+        </div>
+        {% endif %}
+
+        <!-- Success Message -->
+        {% if success %}
+        <div class="success-message">
+            <i class="fas fa-check-circle me-2"></i> {{ success }}
+        </div>
+        {% endif %}
+
+        <!-- Results Section -->
+        {% if profile %}
+        <div class="result-card p-4">
+            <div class="row">
+                <!-- User Profile -->
+                <div class="col-lg-4 text-center">
+                    <img src="{{ profile.avatar_url }}" alt="{{ profile.login }}" class="user-avatar mb-3">
+                    <h2 class="h3 mb-2">{{ profile.name or profile.login }}</h2>
+                    <p class="text-muted mb-3">@{{ profile.login }}</p>
+                    {% if profile.bio %}
+                    <p class="text-muted">{{ profile.bio }}</p>
+                    {% endif %}
+                    <a href="{{ profile.html_url }}" target="_blank" class="github-link">
+                        <i class="fab fa-github"></i> View Profile
+                    </a>
+                </div>
+
+                <!-- User Stats -->
+                <div class="col-lg-8">
+                    <div class="row g-3 mb-4">
+                        <div class="col-md-4">
+                            <div class="stats-card">
+                                <h3>{{ profile.public_repos }}</h3>
+                                <p>Repositories</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stats-card">
+                                <h3>{{ profile.followers }}</h3>
+                                <p>Followers</p>
+                            </div>
+                        </div>
+                        <div class="col-md-4">
+                            <div class="stats-card">
+                                <h3>{{ profile.following }}</h3>
+                                <p>Following</p>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Additional Info -->
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>User Information</h5>
+                            <ul class="list-unstyled">
+                                {% if profile.company %}
+                                <li class="mb-2"><i class="fas fa-building me-2 text-muted"></i>{{ profile.company }}</li>
+                                {% endif %} {% if profile.location %}
+                                <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ profile.location }}</li>
+                                {% endif %} {% if profile.blog %}
+                                <li class="mb-2"><i class="fas fa-link me-2 text-muted"></i><a href="{{ profile.blog }}" target="_blank">{{ profile.blog }}</a></li>
+                                {% endif %}
+                                <li class="mb-2"><i class="fas fa-calendar me-2 text-muted"></i>Joined {{ profile.created_at }}</li>
+                            </ul>
+                        </div>
+                        <div class="col-md-6">
+                            <h5 class="mb-3"><i class="fas fa-chart-bar me-2"></i>Activity</h5>
+                            <ul class="list-unstyled">
+                                <li class="mb-2"><i class="fas fa-star me-2 text-muted"></i>{{ profile.public_gists }} public gists</li>
+                                <li class="mb-2"><i class="fas fa-eye me-2 text-muted"></i>{{ profile.public_repos }} public repositories</li>
+                                {% if profile.hireable %}
+                                <li class="mb-2"><i class="fas fa-briefcase me-2 text-success"></i>Available for hire</li>
+                                {% endif %}
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endif %}
+    </div>
+
+    <!-- Bootstrap JS -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+    <script>
+        // Show loading spinner when form is submitted
+        document.getElementById('searchForm').addEventListener('submit', function() {
+            document.getElementById('loadingSpinner').style.display = 'block';
+        });
+
+        // Auto-hide messages after 5 seconds
+        setTimeout(function() {
+            const messages = document.querySelectorAll('.error-message, .success-message');
+            messages.forEach(function(message) {
+                message.style.opacity = '0';
+                message.style.transition = 'opacity 0.5s ease';
+                setTimeout(function() {
+                    message.remove();
+                }, 500);
+            });
+        }, 5000);
+    </script>
 </body>
 
 </html>
