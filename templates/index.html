@@ -10,270 +10,874 @@
     <!-- Font Awesome -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <!-- Google Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
     <style>
+         :root {
+            --primary-color: #667eea;
+            --secondary-color: #764ba2;
+            --accent-color: #f093fb;
+            --success-color: #4facfe;
+            --warning-color: #f093fb;
+            --danger-color: #f5576c;
+            --dark-color: #2c3e50;
+            --light-color: #ecf0f1;
+            --text-primary: #2c3e50;
+            --text-secondary: #7f8c8d;
+            --border-radius: 16px;
+            --box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            --bg-gradient: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+        }
+        /* Dark Mode Variables */
+        
+        [data-theme="dark"] {
+            --text-primary: #ecf0f1;
+            --text-secondary: #bdc3c7;
+            --light-color: #2c3e50;
+            --dark-color: #ecf0f1;
+            --bg-gradient: linear-gradient(135deg, #2c3e50 0%, #34495e 100%);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
         body {
             font-family: 'Inter', sans-serif;
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: var(--bg-gradient);
             min-height: 100vh;
+            color: var(--text-primary);
+            line-height: 1.6;
+            transition: var(--transition);
         }
         
-        .hero-section {
-            background: rgba(255, 255, 255, 0.1);
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* Header Section */
+        
+        .header {
+            text-align: center;
+            padding: 3rem 0 2rem;
+            color: white;
+        }
+        
+        .header-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            background: linear-gradient(45deg, #fff, #f0f0f0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        
+        .header h1 {
+            font-size: 3rem;
+            font-weight: 800;
+            margin-bottom: 1rem;
+            text-shadow: 0 2px 10px rgba(0, 0, 0, 0.3);
+        }
+        
+        .header p {
+            font-size: 1.2rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        /* Theme Toggle */
+        
+        .theme-toggle {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 1000;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 50%;
+            width: 50px;
+            height: 50px;
+            color: white;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: var(--transition);
             backdrop-filter: blur(10px);
-            border-radius: 20px;
-            border: 1px solid rgba(255, 255, 255, 0.2);
-            padding: 3rem 2rem;
-            margin: 2rem 0;
         }
         
-        .search-container {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
-            padding: 2rem;
+        .theme-toggle:hover {
+            background: rgba(255, 255, 255, 0.3);
+            transform: scale(1.1);
+        }
+        /* Language Switcher */
+        
+        .language-switcher {
+            position: fixed;
+            top: 20px;
+            left: 20px;
+            z-index: 1000;
+        }
+        
+        .language-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 8px;
+            padding: 8px 16px;
+            color: white;
+            cursor: pointer;
+            transition: var(--transition);
+            backdrop-filter: blur(10px);
+        }
+        
+        .language-btn:hover {
+            background: rgba(255, 255, 255, 0.3);
+        }
+        /* Search Section */
+        
+        .search-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
             margin: 2rem 0;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .search-form {
+            max-width: 600px;
+            margin: 0 auto;
+        }
+        
+        .search-input-group {
+            position: relative;
+            display: flex;
+            align-items: center;
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
+            overflow: hidden;
+            transition: var(--transition);
+        }
+        
+        .search-input-group:focus-within {
+            box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
+            transform: translateY(-2px);
         }
         
         .search-input {
-            border: 2px solid #e9ecef;
-            border-radius: 10px;
-            padding: 12px 20px;
+            flex: 1;
+            border: none;
+            padding: 1.2rem 1.5rem;
             font-size: 1.1rem;
-            transition: all 0.3s ease;
-        }
-        
-        .search-input:focus {
-            border-color: #667eea;
-            box-shadow: 0 0 0 0.2rem rgba(102, 126, 234, 0.25);
+            outline: none;
+            background: transparent;
         }
         
         .search-btn {
-            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+            color: white;
             border: none;
-            border-radius: 10px;
-            padding: 12px 30px;
+            padding: 1.2rem 2rem;
             font-weight: 600;
-            transition: all 0.3s ease;
+            cursor: pointer;
+            transition: var(--transition);
+            white-space: nowrap;
         }
         
         .search-btn:hover {
             transform: translateY(-2px);
-            box-shadow: 0 10px 20px rgba(102, 126, 234, 0.3);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+        /* Profile Section */
+        
+        .profile-section {
+            display: none;
+            animation: fadeInUp 0.6s ease-out;
         }
         
-        .result-card {
-            background: white;
-            border-radius: 15px;
-            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
-            transition: all 0.3s ease;
+        .profile-section.show {
+            display: block;
         }
         
-        .result-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(30px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
         
-        .user-avatar {
+        .profile-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: var(--border-radius);
+            padding: 2.5rem;
+            margin: 2rem 0;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+        
+        .profile-header {
+            display: flex;
+            align-items: center;
+            gap: 2rem;
+            margin-bottom: 2rem;
+            flex-wrap: wrap;
+        }
+        
+        .profile-avatar {
             width: 120px;
             height: 120px;
             border-radius: 50%;
-            border: 4px solid #667eea;
+            border: 4px solid var(--primary-color);
+            box-shadow: 0 8px 25px rgba(0, 0, 0, 0.2);
             object-fit: cover;
+            flex-shrink: 0;
         }
         
-        .stats-card {
-            background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);
-            color: white;
-            border-radius: 10px;
-            padding: 1rem;
-            text-align: center;
-        }
-        
-        .stats-card h3 {
-            margin: 0;
-            font-size: 1.5rem;
+        .profile-info h2 {
+            font-size: 2rem;
             font-weight: 700;
+            margin-bottom: 0.5rem;
+            color: var(--text-primary);
         }
         
-        .stats-card p {
-            margin: 0;
-            opacity: 0.9;
+        .profile-username {
+            color: var(--text-secondary);
+            font-size: 1.1rem;
+            margin-bottom: 1rem;
         }
         
-        .github-link {
-            background: #24292e;
-            color: white;
-            text-decoration: none;
-            padding: 10px 20px;
-            border-radius: 8px;
+        .profile-bio {
+            color: var(--text-secondary);
+            font-size: 1rem;
+            line-height: 1.6;
+            margin-bottom: 1.5rem;
+        }
+        
+        .profile-link {
             display: inline-flex;
             align-items: center;
-            gap: 8px;
-            transition: all 0.3s ease;
+            gap: 0.5rem;
+            background: var(--dark-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.8rem 1.5rem;
+            border-radius: 8px;
+            font-weight: 600;
+            transition: var(--transition);
         }
         
-        .github-link:hover {
+        .profile-link:hover {
             background: #000;
             color: white;
             transform: translateY(-2px);
         }
+        /* Stats Grid */
+        
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 1.5rem;
+            margin: 2rem 0;
+        }
+        
+        .stat-card {
+            background: linear-gradient(135deg, var(--accent-color), var(--danger-color));
+            color: white;
+            padding: 1.5rem;
+            border-radius: 12px;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 15px 35px rgba(240, 147, 251, 0.4);
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+            font-weight: 800;
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-label {
+            font-size: 0.9rem;
+            opacity: 0.9;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+        /* Repositories Section */
+        
+        .repos-section {
+            margin-top: 2rem;
+        }
+        
+        .repos-header {
+            color: white;
+            font-size: 1.5rem;
+            font-weight: 700;
+            margin-bottom: 1.5rem;
+            text-shadow: 0 2px 4px rgba(0, 0, 0, 0.3);
+        }
+        
+        .repo-card {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 12px;
+            padding: 1.5rem;
+            margin-bottom: 1rem;
+            box-shadow: var(--box-shadow);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: var(--transition);
+        }
+        
+        .repo-card:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
+        }
+        
+        .repo-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            margin-bottom: 1rem;
+        }
+        
+        .repo-name {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--text-primary);
+            text-decoration: none;
+        }
+        
+        .repo-name:hover {
+            color: var(--primary-color);
+        }
+        
+        .repo-description {
+            color: var(--text-secondary);
+            margin-bottom: 1rem;
+            line-height: 1.5;
+        }
+        
+        .repo-stats {
+            display: flex;
+            gap: 1rem;
+            flex-wrap: wrap;
+        }
+        
+        .repo-stat {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            color: var(--text-secondary);
+            font-size: 0.9rem;
+        }
+        
+        .repo-link {
+            background: var(--primary-color);
+            color: white;
+            text-decoration: none;
+            padding: 0.5rem 1rem;
+            border-radius: 6px;
+            font-size: 0.9rem;
+            transition: var(--transition);
+        }
+        
+        .repo-link:hover {
+            background: var(--secondary-color);
+            color: white;
+            transform: translateY(-1px);
+        }
+        /* Info Grid */
+        
+        .info-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+            gap: 2rem;
+            margin-top: 2rem;
+        }
+        
+        .info-section {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 12px;
+            padding: 1.5rem;
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        .info-section h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            margin-bottom: 1rem;
+            color: var(--text-primary);
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+        
+        .info-list {
+            list-style: none;
+        }
+        
+        .info-item {
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            padding: 0.75rem 0;
+            border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+            color: var(--text-secondary);
+        }
+        
+        .info-item:last-child {
+            border-bottom: none;
+        }
+        
+        .info-icon {
+            width: 20px;
+            color: var(--primary-color);
+        }
+        
+        .info-link {
+            color: var(--primary-color);
+            text-decoration: none;
+            transition: var(--transition);
+        }
+        
+        .info-link:hover {
+            color: var(--secondary-color);
+        }
+        /* Loading Spinner */
         
         .loading-spinner {
             display: none;
+            text-align: center;
+            color: white;
+            margin: 2rem 0;
+        }
+        
+        .spinner {
+            width: 50px;
+            height: 50px;
+            border: 4px solid rgba(255, 255, 255, 0.3);
+            border-top: 4px solid white;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+            margin: 0 auto 1rem;
+        }
+        
+        @keyframes spin {
+            0% {
+                transform: rotate(0deg);
+            }
+            100% {
+                transform: rotate(360deg);
+            }
+        }
+        /* Messages */
+        
+        .message {
+            padding: 1rem 1.5rem;
+            border-radius: 8px;
+            margin: 1rem 0;
+            display: flex;
+            align-items: center;
+            gap: 0.75rem;
+            font-weight: 500;
         }
         
         .error-message {
-            background: #f8d7da;
-            color: #721c24;
-            border: 1px solid #f5c6cb;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
+            background: #fee;
+            color: #c53030;
+            border: 1px solid #feb2b2;
         }
         
         .success-message {
-            background: #d4edda;
-            color: #155724;
-            border: 1px solid #c3e6cb;
-            border-radius: 10px;
-            padding: 1rem;
-            margin: 1rem 0;
+            background: #f0fff4;
+            color: #22543d;
+            border: 1px solid #9ae6b4;
+        }
+        /* Responsive Design */
+        
+        @media (max-width: 768px) {
+            .header h1 {
+                font-size: 2rem;
+            }
+            .header p {
+                font-size: 1rem;
+            }
+            .search-section {
+                padding: 1.5rem;
+                margin: 1rem 0;
+            }
+            .profile-card {
+                padding: 1.5rem;
+            }
+            .profile-header {
+                flex-direction: column;
+                text-align: center;
+                gap: 1rem;
+            }
+            .profile-avatar {
+                width: 100px;
+                height: 100px;
+            }
+            .profile-info h2 {
+                font-size: 1.5rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+                gap: 1rem;
+            }
+            .stat-number {
+                font-size: 2rem;
+            }
+            .info-grid {
+                grid-template-columns: 1fr;
+                gap: 1rem;
+            }
+            .search-input-group {
+                flex-direction: column;
+                border-radius: 8px;
+            }
+            .search-input {
+                border-radius: 8px 8px 0 0;
+            }
+            .search-btn {
+                border-radius: 0 0 8px 8px;
+                width: 100%;
+            }
+            .theme-toggle,
+            .language-switcher {
+                position: static;
+                margin: 1rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .container {
+                padding: 0 15px;
+            }
+            .header {
+                padding: 2rem 0 1rem;
+            }
+            .header-icon {
+                font-size: 3rem;
+            }
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            .stat-card {
+                padding: 1rem;
+            }
+            .stat-number {
+                font-size: 1.5rem;
+            }
+        }
+        /* Utility Classes */
+        
+        .text-center {
+            text-align: center;
+        }
+        
+        .mb-0 {
+            margin-bottom: 0;
+        }
+        
+        .mb-1 {
+            margin-bottom: 0.5rem;
+        }
+        
+        .mb-2 {
+            margin-bottom: 1rem;
+        }
+        
+        .mb-3 {
+            margin-bottom: 1.5rem;
+        }
+        
+        .mt-2 {
+            margin-top: 1rem;
+        }
+        
+        .mt-3 {
+            margin-top: 1.5rem;
+        }
+        /* Skeleton Loading */
+        
+        .skeleton {
+            background: linear-gradient(90deg, #f0f0f0 25%, #e0e0e0 50%, #f0f0f0 75%);
+            background-size: 200% 100%;
+            animation: loading 1.5s infinite;
+        }
+        
+        @keyframes loading {
+            0% {
+                background-position: 200% 0;
+            }
+            100% {
+                background-position: -200% 0;
+            }
         }
     </style>
 </head>
 
 <body>
+    <!-- Theme Toggle -->
+    <button class="theme-toggle" id="themeToggle" title="Toggle Dark Mode">
+        <i class="fas fa-moon"></i>
+    </button>
+
+    <!-- Language Switcher -->
+    <div class="language-switcher">
+        <button class="language-btn" id="languageBtn" title="Switch Language">
+            <i class="fas fa-globe"></i> EN
+        </button>
+    </div>
+
     <div class="container">
-        <!-- Hero Section -->
-        <div class="hero-section text-center text-white">
-            <div class="row justify-content-center">
-                <div class="col-lg-8">
-                    <i class="fab fa-github fa-3x mb-3"></i>
-                    <h1 class="display-4 fw-bold mb-3">GitHub User Finder</h1>
-                    <p class="lead mb-0">Discover GitHub users and explore their profiles, repositories, and contributions</p>
-                </div>
+        <!-- Header Section -->
+        <div class="header">
+            <div class="header-icon">
+                <i class="fab fa-github"></i>
             </div>
+            <h1>GitHub User Finder</h1>
+            <p>Discover GitHub users and explore their profiles, repositories, and contributions with our powerful search tool.</p>
         </div>
 
         <!-- Search Section -->
-        <div class="search-container">
-            <form action="/" method="post" id="searchForm">
-                <div class="row justify-content-center">
-                    <div class="col-lg-8">
-                        <div class="input-group input-group-lg">
-                            <span class="input-group-text bg-transparent border-end-0">
-                                <i class="fas fa-search text-muted"></i>
-                            </span>
-                            <input type="text" class="form-control search-input border-start-0" name="username" placeholder="Enter GitHub username (e.g., octocat)" required>
-                            <button class="btn search-btn text-white" type="submit">
-                                <i class="fas fa-search me-2"></i>Search
-                            </button>
-                        </div>
-                    </div>
+        <div class="search-section">
+            <form action="/" method="post" id="searchForm" class="search-form">
+                <div class="search-input-group">
+                    <input type="text" class="search-input" name="username" placeholder="Enter GitHub username (e.g., octocat)" required>
+                    <button type="submit" class="search-btn">
+                        <i class="fas fa-search me-2"></i>Search
+                    </button>
                 </div>
             </form>
         </div>
 
         <!-- Loading Spinner -->
-        <div class="text-center loading-spinner" id="loadingSpinner">
-            <div class="spinner-border text-primary" role="status">
-                <span class="visually-hidden">Loading...</span>
-            </div>
-            <p class="mt-2 text-white">Searching for user...</p>
+        <div class="loading-spinner" id="loadingSpinner">
+            <div class="spinner"></div>
+            <p>Searching for user...</p>
         </div>
 
-        <!-- Error Message alert-->
+        <!-- Error Message -->
         {% if error %}
-        <div class="error-message text-center">
-            <i class="fas fa-exclamation-triangle me-2"></i> {{ error }}
+        <div class="message error-message">
+            <i class="fas fa-exclamation-triangle"></i> {{ error }}
         </div>
         {% endif %}
 
         <!-- Success Message -->
         {% if success %}
-        <div class="success-message">
-            <i class="fas fa-check-circle me-2"></i> {{ success }}
+        <div class="message success-message">
+            <i class="fas fa-check-circle"></i> {{ success }}
         </div>
         {% endif %}
 
-        <!-- Results Section -->
-        {% if profile %}
-        <div class="result-card p-4">
-            <div class="row">
-                <!-- User Profile -->
-                <div class="col-lg-4 text-center">
-                    <img src="{{ profile.avatar_url }}" alt="{{ profile.login }}" class="user-avatar mb-3">
-                    <h2 class="h3 mb-2">{{ profile.name or profile.login }}</h2>
-                    <p class="text-muted mb-3">@{{ profile.login }}</p>
-                    {% if profile.bio %}
-                    <p class="text-muted">{{ profile.bio }}</p>
-                    {% endif %}
-                    <a href="{{ profile.html_url }}" target="_blank" class="github-link">
-                        <i class="fab fa-github"></i> View Profile
-                    </a>
+        <!-- Profile Section -->
+        <div class="profile-section {% if profile %}show{% endif %}">
+            {% if profile %}
+            <div class="profile-card">
+                <!-- Profile Header -->
+                <div class="profile-header">
+                    <img src="{{ profile.avatar_url }}" alt="{{ profile.login }}" class="profile-avatar">
+                    <div class="profile-info">
+                        <h2>{{ profile.name or profile.login }}</h2>
+                        <div class="profile-username">@{{ profile.login }}</div>
+                        {% if profile.bio %}
+                        <div class="profile-bio">{{ profile.bio }}</div>
+                        {% endif %}
+                        <a href="{{ profile.html_url }}" target="_blank" class="profile-link">
+                            <i class="fab fa-github"></i> View Profile
+                        </a>
+                    </div>
                 </div>
 
-                <!-- User Stats -->
-                <div class="col-lg-8">
-                    <div class="row g-3 mb-4">
-                        <div class="col-md-4">
-                            <div class="stats-card">
-                                <h3>{{ profile.public_repos }}</h3>
-                                <p>Repositories</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="stats-card">
-                                <h3>{{ profile.followers }}</h3>
-                                <p>Followers</p>
-                            </div>
-                        </div>
-                        <div class="col-md-4">
-                            <div class="stats-card">
-                                <h3>{{ profile.following }}</h3>
-                                <p>Following</p>
-                            </div>
-                        </div>
+                <!-- Stats Grid -->
+                <div class="stats-grid">
+                    <div class="stat-card">
+                        <div class="stat-number">{{ profile.public_repos }}</div>
+                        <div class="stat-label">Repositories</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ profile.followers }}</div>
+                        <div class="stat-label">Followers</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ profile.following }}</div>
+                        <div class="stat-label">Following</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ profile.public_gists }}</div>
+                        <div class="stat-label">Public Gists</div>
+                    </div>
+                    {% if stats %}
+                    <div class="stat-card">
+                        <div class="stat-number">{{ stats.starred_repos }}</div>
+                        <div class="stat-label">Starred Repos</div>
+                    </div>
+                    <div class="stat-card">
+                        <div class="stat-number">{{ stats.total_events }}</div>
+                        <div class="stat-label">Total Events</div>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Info Grid -->
+                <div class="info-grid">
+                    <div class="info-section">
+                        <h3>
+                            <i class="fas fa-info-circle info-icon"></i> User Information
+                        </h3>
+                        <ul class="info-list">
+                            {% if profile.company %}
+                            <li class="info-item">
+                                <i class="fas fa-building info-icon"></i>
+                                <span>{{ profile.company }}</span>
+                            </li>
+                            {% endif %} {% if profile.location %}
+                            <li class="info-item">
+                                <i class="fas fa-map-marker-alt info-icon"></i>
+                                <span>{{ profile.location }}</span>
+                            </li>
+                            {% endif %} {% if profile.blog %}
+                            <li class="info-item">
+                                <i class="fas fa-link info-icon"></i>
+                                <a href="{{ profile.blog }}" target="_blank" class="info-link">{{ profile.blog }}</a>
+                            </li>
+                            {% endif %}
+                            <li class="info-item">
+                                <i class="fas fa-calendar info-icon"></i>
+                                <span>Joined {{ profile.created_at[:10] }}</span>
+                            </li>
+                        </ul>
                     </div>
 
-                    <!-- Additional Info -->
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h5 class="mb-3"><i class="fas fa-info-circle me-2"></i>User Information</h5>
-                            <ul class="list-unstyled">
-                                {% if profile.company %}
-                                <li class="mb-2"><i class="fas fa-building me-2 text-muted"></i>{{ profile.company }}</li>
-                                {% endif %} {% if profile.location %}
-                                <li class="mb-2"><i class="fas fa-map-marker-alt me-2 text-muted"></i>{{ profile.location }}</li>
-                                {% endif %} {% if profile.blog %}
-                                <li class="mb-2"><i class="fas fa-link me-2 text-muted"></i><a href="{{ profile.blog }}" target="_blank">{{ profile.blog }}</a></li>
-                                {% endif %}
-                                <li class="mb-2"><i class="fas fa-calendar me-2 text-muted"></i>Joined {{ profile.created_at }}</li>
-                            </ul>
-                        </div>
-                        <div class="col-md-6">
-                            <h5 class="mb-3"><i class="fas fa-chart-bar me-2"></i>Activity</h5>
-                            <ul class="list-unstyled">
-                                <li class="mb-2"><i class="fas fa-star me-2 text-muted"></i>{{ profile.public_gists }} public gists</li>
-                                <li class="mb-2"><i class="fas fa-eye me-2 text-muted"></i>{{ profile.public_repos }} public repositories</li>
-                                {% if profile.hireable %}
-                                <li class="mb-2"><i class="fas fa-briefcase me-2 text-success"></i>Available for hire</li>
-                                {% endif %}
-                            </ul>
-                        </div>
+                    <div class="info-section">
+                        <h3>
+                            <i class="fas fa-chart-bar info-icon"></i> Activity & Status
+                        </h3>
+                        <ul class="info-list">
+                            <li class="info-item">
+                                <i class="fas fa-star info-icon"></i>
+                                <span>{{ profile.public_gists }} public gists</span>
+                            </li>
+                            <li class="info-item">
+                                <i class="fas fa-eye info-icon"></i>
+                                <span>{{ profile.public_repos }} public repositories</span>
+                            </li>
+                            {% if profile.hireable %}
+                            <li class="info-item">
+                                <i class="fas fa-briefcase info-icon"></i>
+                                <span style="color: #27ae60;">Available for hire</span>
+                            </li>
+                            {% endif %}
+                            <li class="info-item">
+                                <i class="fas fa-clock info-icon"></i>
+                                <span>Last updated: {{ profile.updated_at[:10] }}</span>
+                            </li>
+                        </ul>
                     </div>
                 </div>
             </div>
+
+            <!-- Repositories Section -->
+            {% if repos %}
+            <div class="repos-section">
+                <h3 class="repos-header">
+                    <i class="fas fa-code me-2"></i>Top Repositories
+                </h3>
+                {% for repo in repos %}
+                <div class="repo-card">
+                    <div class="repo-header">
+                        <a href="{{ repo.html_url }}" target="_blank" class="repo-name">{{ repo.name }}</a>
+                        <a href="{{ repo.html_url }}" target="_blank" class="repo-link">
+                            <i class="fas fa-external-link-alt me-1"></i>View
+                        </a>
+                    </div>
+                    {% if repo.description %}
+                    <div class="repo-description">{{ repo.description }}</div>
+                    {% endif %}
+                    <div class="repo-stats">
+                        <div class="repo-stat">
+                            <i class="fas fa-star"></i>
+                            <span>{{ repo.stargazers_count }}</span>
+                        </div>
+                        <div class="repo-stat">
+                            <i class="fas fa-code-branch"></i>
+                            <span>{{ repo.forks_count }}</span>
+                        </div>
+                        <div class="repo-stat">
+                            <i class="fas fa-eye"></i>
+                            <span>{{ repo.watchers_count }}</span>
+                        </div>
+                        {% if repo.language %}
+                        <div class="repo-stat">
+                            <i class="fas fa-circle"></i>
+                            <span>{{ repo.language }}</span>
+                        </div>
+                        {% endif %}
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+            {% endif %} {% endif %}
         </div>
-        {% endif %}
     </div>
 
     <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        // Theme Toggle
+        const themeToggle = document.getElementById('themeToggle');
+        const body = document.body;
+        const icon = themeToggle.querySelector('i');
+
+        // Check for saved theme preference
+        const savedTheme = localStorage.getItem('theme');
+        if (savedTheme) {
+            body.setAttribute('data-theme', savedTheme);
+            updateThemeIcon(savedTheme);
+        }
+
+        themeToggle.addEventListener('click', () => {
+            const currentTheme = body.getAttribute('data-theme');
+            const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+
+            body.setAttribute('data-theme', newTheme);
+            localStorage.setItem('theme', newTheme);
+            updateThemeIcon(newTheme);
+        });
+
+        function updateThemeIcon(theme) {
+            if (theme === 'dark') {
+                icon.className = 'fas fa-sun';
+            } else {
+                icon.className = 'fas fa-moon';
+            }
+        }
+
+        // Language Switcher
+        const languageBtn = document.getElementById('languageBtn');
+        let currentLang = 'en';
+
+        languageBtn.addEventListener('click', () => {
+            currentLang = currentLang === 'en' ? 'tr' : 'en';
+            languageBtn.innerHTML = `<i class="fas fa-globe"></i> ${currentLang.toUpperCase()}`;
+            // Here you can implement actual language switching
+        });
+
         // Show loading spinner when form is submitted
         document.getElementById('searchForm').addEventListener('submit', function() {
             document.getElementById('loadingSpinner').style.display = 'block';
@@ -281,7 +885,7 @@
 
         // Auto-hide messages after 5 seconds
         setTimeout(function() {
-            const messages = document.querySelectorAll('.error-message, .success-message');
+            const messages = document.querySelectorAll('.message');
             messages.forEach(function(message) {
                 message.style.opacity = '0';
                 message.style.transition = 'opacity 0.5s ease';
@@ -290,6 +894,42 @@
                 }, 500);
             });
         }, 5000);
+
+        // Smooth scroll to profile section when it appears
+        const profileSection = document.querySelector('.profile-section');
+        if (profileSection && profileSection.classList.contains('show')) {
+            profileSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }
+
+        // Add keyboard shortcuts
+        document.addEventListener('keydown', function(e) {
+            // Ctrl/Cmd + K to focus search
+            if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+                e.preventDefault();
+                document.querySelector('.search-input').focus();
+            }
+
+            // Escape to clear search
+            if (e.key === 'Escape') {
+                document.querySelector('.search-input').value = '';
+                document.querySelector('.search-input').blur();
+            }
+        });
+
+        // Add search suggestions (placeholder)
+        const searchInput = document.querySelector('.search-input');
+        searchInput.addEventListener('input', function() {
+            // Here you can implement search suggestions
+            // For now, just add a visual indicator
+            if (this.value.length > 0) {
+                this.style.borderColor = 'var(--primary-color)';
+            } else {
+                this.style.borderColor = '#e9ecef';
+            }
+        });
     </script>
 </body>
 
