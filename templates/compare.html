@@ -545,18 +545,35 @@
                 if (data.results && Array.isArray(data.results)) {
                     displayResults(data.results);
                 } else {
-                    throw new Error('Invalid response format');
+                    throw new Error('Invalid response format from server');
                 }
             })
             .catch(error => {
                 document.getElementById('loadingSpinner').style.display = 'none';
                 console.error('Error:', error);
-                alert('An error occurred while comparing users: ' + error.message);
+
+                // Show error in the results section
+                const usersGrid = document.getElementById('usersGrid');
+                const resultsSection = document.getElementById('resultsSection');
+
+                usersGrid.innerHTML = `
+                    <div class="user-card error">
+                        <div class="error-message">
+                            <i class="fas fa-exclamation-triangle"></i>
+                            <strong>Error:</strong> ${error.message}
+                        </div>
+                    </div>
+                `;
+
+                resultsSection.style.display = 'block';
+                resultsSection.classList.add('show');
             });
     });
 
     function displayResults(results) {
         const usersGrid = document.getElementById('usersGrid');
+        const resultsSection = document.getElementById('resultsSection');
+
         usersGrid.innerHTML = '';
 
         if (!results || results.length === 0) {
@@ -575,7 +592,17 @@
             });
         }
 
-        document.getElementById('resultsSection').classList.add('show');
+        // Show the results section
+        resultsSection.style.display = 'block';
+        resultsSection.classList.add('show');
+
+        // Scroll to results with a small delay to ensure DOM is updated
+        setTimeout(() => {
+            resultsSection.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+            });
+        }, 100);
     }
 
     function createUserCard(result) {

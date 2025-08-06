@@ -86,6 +86,23 @@
             filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
         }
         
+        .navbar-brand .brand-text {
+            display: inline;
+        }
+        
+        .navbar-brand .brand-text-mobile {
+            display: none;
+        }
+        
+        @media (max-width: 576px) {
+            .navbar-brand .brand-text {
+                display: none;
+            }
+            .navbar-brand .brand-text-mobile {
+                display: inline;
+            }
+        }
+        
         .navbar-brand:hover {
             color: rgba(255, 255, 255, 0.9) !important;
             text-shadow: 0 2px 8px rgba(0, 0, 0, 0.4);
@@ -125,10 +142,13 @@
         .navbar-toggler {
             border: none;
             color: white;
+            padding: 0.25rem 0.5rem;
+            font-size: 1rem;
         }
         
         .navbar-toggler:focus {
             box-shadow: none;
+            outline: none;
         }
         
         .navbar-toggler-icon {
@@ -203,17 +223,33 @@
             .navbar {
                 padding: 0.5rem 0;
             }
+            .navbar .container {
+                padding: 0 15px;
+            }
             .navbar-brand {
-                font-size: 1.2rem;
+                font-size: 1rem;
+                max-width: 200px;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                white-space: nowrap;
             }
             .nav-link {
                 margin: 0.25rem 0;
                 text-align: center;
                 background: rgba(255, 255, 255, 0.2);
                 border: 1px solid rgba(255, 255, 255, 0.3);
+                padding: 0.5rem 0.8rem !important;
+                font-size: 0.9rem;
             }
             .nav-link:hover {
                 background: rgba(255, 255, 255, 0.3);
+            }
+            .navbar-collapse {
+                background: rgba(255, 255, 255, 0.1);
+                border-radius: 8px;
+                margin-top: 0.5rem;
+                padding: 0.5rem;
+                backdrop-filter: blur(10px);
             }
             .footer-content {
                 flex-direction: column;
@@ -232,18 +268,53 @@
                 padding: 0 15px;
             }
             .navbar-brand {
-                font-size: 1.1rem;
+                font-size: 0.9rem;
+                max-width: 150px;
             }
             .nav-link {
-                padding: 0.4rem 0.8rem !important;
-                font-size: 0.9rem;
+                padding: 0.4rem 0.6rem !important;
+                font-size: 0.85rem;
                 margin: 0.1rem 0;
             }
             .navbar-collapse {
-                background: rgba(255, 255, 255, 0.1);
+                background: rgba(255, 255, 255, 0.15);
                 border-radius: 8px;
                 margin-top: 0.5rem;
                 padding: 0.5rem;
+                backdrop-filter: blur(10px);
+            }
+            .navbar-nav {
+                gap: 0.25rem;
+            }
+            .navbar-toggler {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 480px) {
+            .navbar-brand {
+                font-size: 0.8rem;
+                max-width: 120px;
+            }
+            .nav-link {
+                padding: 0.3rem 0.5rem !important;
+                font-size: 0.8rem;
+            }
+            .navbar-toggler {
+                padding: 0.25rem 0.5rem;
+                font-size: 0.9rem;
+            }
+        }
+        
+        @media (max-width: 360px) {
+            .navbar-brand {
+                font-size: 0.75rem;
+                max-width: 100px;
+            }
+            .nav-link {
+                padding: 0.25rem 0.4rem !important;
+                font-size: 0.75rem;
             }
         }
         /* Additional responsive utilities */
@@ -309,7 +380,9 @@
     <nav class="navbar navbar-expand-lg">
         <div class="container">
             <a class="navbar-brand" href="{{ url_for('index') }}">
-                <i class="fab fa-github"></i> GitHub User Finder
+                <i class="fab fa-github"></i>
+                <span class="brand-text">GitHub User Finder</span>
+                <span class="brand-text-mobile">GitHub Finder</span>
             </a>
 
             <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">

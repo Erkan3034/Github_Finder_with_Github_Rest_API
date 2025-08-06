@@ -33,13 +33,11 @@
     /* Search Section */
     
     .search-section {
-        background: rgba(255, 255, 255, 0.95);
         backdrop-filter: blur(20px);
+        -webkit-backdrop-filter: blur(20px);
         border-radius: var(--border-radius);
         padding: 2.5rem;
         margin: 2rem 0;
-        box-shadow: var(--box-shadow);
-        border: 1px solid rgba(255, 255, 255, 0.2);
     }
     
     .search-form {
@@ -51,16 +49,18 @@
         position: relative;
         display: flex;
         align-items: center;
-        background: white;
+        background: rgba(255, 255, 255, 0.9);
         border-radius: 12px;
         box-shadow: 0 4px 20px rgba(0, 0, 0, 0.1);
         overflow: hidden;
         transition: var(--transition);
+        border: 1px solid rgba(255, 255, 255, 0.3);
     }
     
     .search-input-group:focus-within {
         box-shadow: 0 8px 30px rgba(102, 126, 234, 0.3);
         transform: translateY(-2px);
+        background: rgba(255, 255, 255, 0.95);
     }
     
     .search-input {
@@ -70,6 +70,11 @@
         font-size: 1.1rem;
         outline: none;
         background: transparent;
+        color: var(--text-primary);
+    }
+    
+    .search-input::placeholder {
+        color: var(--text-secondary);
     }
     
     .search-btn {
