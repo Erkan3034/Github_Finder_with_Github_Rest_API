@@ -310,6 +310,10 @@
         display: none;
         text-align: center;
         padding: 2rem;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: var(--border-radius);
+        margin: 2rem 0;
+        backdrop-filter: blur(10px);
     }
     
     .spinner {
@@ -320,6 +324,13 @@
         border-radius: 50%;
         animation: spin 1s linear infinite;
         margin: 0 auto;
+    }
+    
+    .loading-text {
+        color: white;
+        margin-top: 1rem;
+        font-weight: 500;
+        text-shadow: 0 1px 2px rgba(0, 0, 0, 0.3);
     }
     
     @keyframes spin {
@@ -342,6 +353,33 @@
         display: flex;
         align-items: center;
         gap: 0.5rem;
+        font-weight: 500;
+    }
+    
+    .success-message {
+        background: rgba(76, 175, 80, 0.1);
+        color: #2e7d32;
+        border: 1px solid rgba(76, 175, 80, 0.3);
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
+    }
+    
+    .info-message {
+        background: rgba(33, 150, 243, 0.1);
+        color: #1565c0;
+        border: 1px solid rgba(33, 150, 243, 0.3);
+        padding: 1rem;
+        border-radius: 8px;
+        margin: 1rem 0;
+        display: flex;
+        align-items: center;
+        gap: 0.5rem;
+        font-weight: 500;
     }
     /* Responsive Design */
     
@@ -443,7 +481,7 @@
 <!-- Loading Spinner -->
 <div class="loading-spinner" id="loadingSpinner">
     <div class="spinner"></div>
-    <p class="mt-3 text-white">Comparing users...</p>
+    <p class="loading-text">Comparing users...</p>
 </div>
 
 <!-- Results Section -->
@@ -472,6 +510,13 @@
             return;
         }
 
+        // Validate usernames (basic validation)
+        const invalidUsernames = usernames.filter(username => !/^[a-zA-Z0-9_-]+$/.test(username));
+        if (invalidUsernames.length > 0) {
+            alert('Invalid usernames detected. GitHub usernames can only contain letters, numbers, hyphens, and underscores.');
+            return;
+        }
+
         // Show loading spinner
         document.getElementById('loadingSpinner').style.display = 'block';
         document.getElementById('resultsSection').style.display = 'none';
@@ -486,15 +531,27 @@
                     usernames: usernames
                 })
             })
-            .then(response => response.json())
+            .then(response => {
+                if (!response.ok) {
+                    throw new Error(`HTTP error! status: ${response.status}`);
+                }
+                return response.json();
+            })
             .then(data => {
                 document.getElementById('loadingSpinner').style.display = 'none';
-                displayResults(data.results);
+                if (data.error) {
+                    throw new Error(data.error);
+                }
+                if (data.results && Array.isArray(data.results)) {
+                    displayResults(data.results);
+                } else {
+                    throw new Error('Invalid response format');
+                }
             })
             .catch(error => {
                 document.getElementById('loadingSpinner').style.display = 'none';
                 console.error('Error:', error);
-                alert('An error occurred while comparing users. Please try again.');
+                alert('An error occurred while comparing users: ' + error.message);
             });
     });
 
@@ -502,10 +559,21 @@
         const usersGrid = document.getElementById('usersGrid');
         usersGrid.innerHTML = '';
 
-        results.forEach(result => {
-            const userCard = createUserCard(result);
-            usersGrid.appendChild(userCard);
-        });
+        if (!results || results.length === 0) {
+            usersGrid.innerHTML = `
+                <div class="user-card error">
+                    <div class="error-message">
+                        <i class="fas fa-exclamation-triangle"></i>
+                        No results found. Please check the usernames and try again.
+                    </div>
+                </div>
+            `;
+        } else {
+            results.forEach(result => {
+                const userCard = createUserCard(result);
+                usersGrid.appendChild(userCard);
+            });
+        }
 
         document.getElementById('resultsSection').classList.add('show');
     }
@@ -519,7 +587,18 @@
             card.innerHTML = `
                 <div class="error-message">
                     <i class="fas fa-exclamation-triangle"></i>
-                    <strong>${result.username}</strong>: ${result.error}
+                    <strong>${result.username || 'Unknown user'}</strong>: ${result.error}
+                </div>
+            `;
+            return card;
+        }
+
+        if (!result.profile) {
+            card.classList.add('error');
+            card.innerHTML = `
+                <div class="error-message">
+                    <i class="fas fa-exclamation-triangle"></i>
+                    <strong>${result.username || 'Unknown user'}</strong>: No profile data available
                 </div>
             `;
             return card;
@@ -529,27 +608,34 @@
         const repos = result.repos || [];
         const stats = result.stats || {};
 
+        // Sanitize data to prevent XSS
+        const sanitizeHtml = (str) => {
+            const div = document.createElement('div');
+            div.textContent = str || '';
+            return div.innerHTML;
+        };
+
         card.innerHTML = `
             <div class="user-header">
-                <img src="${profile.avatar_url}" alt="${profile.name || profile.login}" class="user-avatar">
+                <img src="${sanitizeHtml(profile.avatar_url)}" alt="${sanitizeHtml(profile.name || profile.login)}" class="user-avatar" onerror="this.src='https://via.placeholder.com/80x80?text=?'">
                 <div class="user-info">
-                    <h3 class="user-name">${profile.name || profile.login}</h3>
-                    <p class="user-username">@${profile.login}</p>
-                    ${profile.bio ? `<p class="user-bio">${profile.bio}</p>` : ''}
+                    <h3 class="user-name">${sanitizeHtml(profile.name || profile.login)}</h3>
+                    <p class="user-username">@${sanitizeHtml(profile.login)}</p>
+                    ${profile.bio ? `<p class="user-bio">${sanitizeHtml(profile.bio)}</p>` : ''}
                 </div>
             </div>
             
             <div class="user-stats">
                 <div class="stat-item">
-                    <div class="stat-number">${profile.public_repos}</div>
+                    <div class="stat-number">${profile.public_repos || 0}</div>
                     <div class="stat-label">Repositories</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">${profile.followers}</div>
+                    <div class="stat-number">${profile.followers || 0}</div>
                     <div class="stat-label">Followers</div>
                 </div>
                 <div class="stat-item">
-                    <div class="stat-number">${profile.following}</div>
+                    <div class="stat-number">${profile.following || 0}</div>
                     <div class="stat-label">Following</div>
                 </div>
                 ${stats.starred_repos ? `
@@ -561,11 +647,11 @@
             </div>
             
             <div class="user-links">
-                <a href="${profile.html_url}" target="_blank" class="user-link">
+                <a href="${sanitizeHtml(profile.html_url)}" target="_blank" class="user-link">
                     <i class="fab fa-github"></i>View Profile
                 </a>
                 ${profile.blog ? `
-                <a href="${profile.blog}" target="_blank" class="user-link">
+                <a href="${sanitizeHtml(profile.blog)}" target="_blank" class="user-link">
                     <i class="fas fa-globe"></i>Website
                 </a>
                 ` : ''}
@@ -580,21 +666,21 @@
                     ${repos.slice(0, 5).map(repo => `
                     <div class="repo-item">
                         <div class="repo-header">
-                            <a href="${repo.html_url}" target="_blank" class="repo-name">${repo.name}</a>
+                            <a href="${sanitizeHtml(repo.html_url)}" target="_blank" class="repo-name">${sanitizeHtml(repo.name)}</a>
                         </div>
                         <div class="repo-stats">
                             <div class="repo-stat">
                                 <i class="fas fa-star"></i>
-                                <span>${repo.stargazers_count}</span>
+                                <span>${repo.stargazers_count || 0}</span>
                             </div>
                             <div class="repo-stat">
                                 <i class="fas fa-code-branch"></i>
-                                <span>${repo.forks_count}</span>
+                                <span>${repo.forks_count || 0}</span>
                             </div>
                             ${repo.language ? `
                             <div class="repo-stat">
                                 <i class="fas fa-circle"></i>
-                                <span>${repo.language}</span>
+                                <span>${sanitizeHtml(repo.language)}</span>
                             </div>
                             ` : ''}
                         </div>
@@ -615,6 +701,13 @@
             e.preventDefault();
             document.getElementById('compareForm').dispatchEvent(new Event('submit'));
         }
+    });
+
+    // Clear form on page load
+    window.addEventListener('load', function() {
+        document.getElementById('compareForm').reset();
+        document.getElementById('resultsSection').style.display = 'none';
+        document.getElementById('loadingSpinner').style.display = 'none';
     });
 </script>
 {% endblock %}

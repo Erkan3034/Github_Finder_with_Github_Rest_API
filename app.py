@@ -194,42 +194,74 @@ def compare_users():
 @app.route('/api/compare', methods=['POST'])
 def api_compare():
     """API endpoint for comparing users"""
-    data = request.get_json()
-    usernames = data.get('usernames', [])
-    
-    if len(usernames) < 2:
-        return jsonify({'error': 'At least 2 usernames required'}), 400
-    
-    results = []
-    for username in usernames:
-        try:
-            user_url = f"{GITHUB_API_BASE}/users/{username}"
-            response = requests.get(user_url, headers=HEADERS)
-            
-            if response.status_code == 200:
-                profile = response.json()
-                repos = get_user_repos(username)
-                stats = get_user_stats(username)
+    try:
+        data = request.get_json()
+        if not data:
+            return jsonify({'error': 'No JSON data provided'}), 400
+        
+        usernames = data.get('usernames', [])
+        
+        if not isinstance(usernames, list):
+            return jsonify({'error': 'usernames must be a list'}), 400
+        
+        if len(usernames) < 2:
+            return jsonify({'error': 'At least 2 usernames required'}), 400
+        
+        results = []
+        for username in usernames:
+            if not username or not isinstance(username, str):
+                results.append({
+                    'username': str(username) if username else 'Unknown',
+                    'error': 'Invalid username format'
+                })
+                continue
                 
+            try:
+                user_url = f"{GITHUB_API_BASE}/users/{username}"
+                response = requests.get(user_url, headers=HEADERS, timeout=10)
+                
+                if response.status_code == 200:
+                    profile = response.json()
+                    repos = get_user_repos(username)
+                    stats = get_user_stats(username)
+                    
+                    results.append({
+                        'username': username,
+                        'profile': profile,
+                        'repos': repos,
+                        'stats': stats
+                    })
+                elif response.status_code == 404:
+                    results.append({
+                        'username': username,
+                        'error': 'User not found'
+                    })
+                else:
+                    results.append({
+                        'username': username,
+                        'error': f'GitHub API error: {response.status_code}'
+                    })
+                    
+            except requests.exceptions.Timeout:
                 results.append({
                     'username': username,
-                    'profile': profile,
-                    'repos': repos,
-                    'stats': stats
+                    'error': 'Request timeout'
                 })
-            else:
+            except requests.exceptions.RequestException as e:
                 results.append({
                     'username': username,
-                    'error': 'User not found'
+                    'error': f'Network error: {str(e)}'
                 })
-                
-        except Exception as e:
-            results.append({
-                'username': username,
-                'error': str(e)
-            })
-    
-    return jsonify({'results': results})
+            except Exception as e:
+                results.append({
+                    'username': username,
+                    'error': f'Unexpected error: {str(e)}'
+                })
+        
+        return jsonify({'results': results})
+        
+    except Exception as e:
+        return jsonify({'error': f'Server error: {str(e)}'}), 500
 
 @app.errorhandler(404)
 def not_found(error):
