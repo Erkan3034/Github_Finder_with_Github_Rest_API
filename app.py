@@ -3,9 +3,10 @@ import requests
 import json
 from datetime import datetime
 import time
+import os
 
 app = Flask(__name__)
-app.secret_key = 'your-secret-key-here'  # Change this in production
+app.secret_key = os.environ.get('SECRET_KEY', 'your-secret-key-here')  # Use environment variable in production
 
 # GitHub API Configuration
 GITHUB_API_BASE = "https://api.github.com"
@@ -17,6 +18,21 @@ HEADERS = {
 # Cache for API responses (simple in-memory cache)
 cache = {}
 CACHE_DURATION = 300  # 5 minutes
+
+# Production configuration
+if not app.debug:
+    import logging
+    from logging.handlers import RotatingFileHandler
+    if not os.path.exists('logs'):
+        os.mkdir('logs')
+    file_handler = RotatingFileHandler('logs/github_finder.log', maxBytes=10240, backupCount=10)
+    file_handler.setFormatter(logging.Formatter(
+        '%(asctime)s %(levelname)s: %(message)s [in %(pathname)s:%(lineno)d]'
+    ))
+    file_handler.setLevel(logging.INFO)
+    app.logger.addHandler(file_handler)
+    app.logger.setLevel(logging.INFO)
+    app.logger.info('GitHub User Finder startup')
 
 def get_cached_data(key):
     """Get data from cache if it exists and is not expired"""
@@ -272,4 +288,5 @@ def internal_error(error):
     return render_template('500.html'), 500
 
 if __name__ == '__main__':
-    app.run(debug=True, host='0.0.0.0', port=5000)
+    port = int(os.environ.get('PORT', 5000))
+    app.run(debug=False, host='0.0.0.0', port=port)

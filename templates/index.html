@@ -43,6 +43,7 @@
     .search-form {
         max-width: 600px;
         margin: 0 auto;
+        width: 100%;
     }
     
     .search-input-group {
@@ -55,6 +56,7 @@
         overflow: hidden;
         transition: var(--transition);
         border: 1px solid rgba(255, 255, 255, 0.3);
+        width: 100%;
     }
     
     .search-input-group:focus-within {
@@ -71,6 +73,7 @@
         outline: none;
         background: transparent;
         color: var(--text-primary);
+        min-width: 0;
     }
     
     .search-input::placeholder {
@@ -86,6 +89,7 @@
         cursor: pointer;
         transition: var(--transition);
         white-space: nowrap;
+        flex-shrink: 0;
     }
     
     .search-btn:hover {
@@ -240,6 +244,7 @@
         margin-bottom: 1rem;
         border: 1px solid rgba(255, 255, 255, 0.3);
         transition: var(--transition);
+        overflow: hidden;
     }
     
     .repo-card:hover {
@@ -250,10 +255,11 @@
     .repo-header {
         display: flex;
         justify-content: space-between;
-        align-items: center;
+        align-items: flex-start;
         margin-bottom: 1rem;
         flex-wrap: wrap;
         gap: 1rem;
+        min-width: 0;
     }
     
     .repo-name {
@@ -261,6 +267,11 @@
         font-weight: 600;
         color: var(--primary-color);
         text-decoration: none;
+        word-break: break-word;
+        hyphens: auto;
+        flex: 1;
+        min-width: 0;
+        overflow-wrap: break-word;
     }
     
     .repo-name:hover {
@@ -278,6 +289,8 @@
         border-radius: 6px;
         font-size: 0.9rem;
         transition: var(--transition);
+        white-space: nowrap;
+        flex-shrink: 0;
     }
     
     .repo-link:hover {
@@ -290,12 +303,15 @@
         color: var(--text-secondary);
         margin-bottom: 1rem;
         line-height: 1.5;
+        word-break: break-word;
+        overflow-wrap: break-word;
     }
     
     .repo-stats {
         display: flex;
         gap: 1.5rem;
         flex-wrap: wrap;
+        align-items: center;
     }
     
     .repo-stat {
@@ -368,42 +384,43 @@
             padding: 2rem 1.5rem;
             margin: 1rem 0;
         }
+        .search-form {
+            max-width: 100%;
+        }
         .search-input-group {
-            flex-direction: column;
+            flex-direction: row;
+            align-items: center;
         }
         .search-input {
-            padding: 1rem 1.5rem;
+            padding: 1rem 1.2rem;
             font-size: 1rem;
         }
         .search-btn {
-            width: 100%;
-            padding: 1rem;
+            padding: 1rem 1.5rem;
+            font-size: 0.9rem;
+        }
+        .profile-section {
+            padding: 2rem 1.5rem;
         }
         .profile-header {
             flex-direction: column;
             text-align: center;
-            gap: 1.5rem;
+            gap: 1rem;
         }
         .profile-avatar {
-            width: 100px;
-            height: 100px;
-        }
-        .profile-name {
-            font-size: 2rem;
+            width: 120px;
+            height: 120px;
         }
         .profile-stats {
-            justify-content: center;
-        }
-        .stat-item {
-            min-width: 80px;
-            padding: 0.75rem;
-        }
-        .profile-links {
-            justify-content: center;
+            grid-template-columns: repeat(2, 1fr);
         }
         .repo-header {
             flex-direction: column;
             align-items: flex-start;
+            gap: 0.5rem;
+        }
+        .repo-name {
+            font-size: 1.1rem;
         }
         .repo-stats {
             gap: 1rem;
@@ -420,21 +437,80 @@
         .search-section {
             padding: 1.5rem 1rem;
         }
-        .profile-card {
-            padding: 1.5rem;
+        .search-form {
+            max-width: 100%;
         }
-        .profile-name {
-            font-size: 1.8rem;
+        .search-input-group {
+            flex-direction: row;
+            align-items: center;
+        }
+        .search-input {
+            padding: 0.9rem 1rem;
+            font-size: 0.95rem;
+        }
+        .search-btn {
+            padding: 0.9rem 1.2rem;
+            font-size: 0.85rem;
+        }
+        .profile-section {
+            padding: 1.5rem 1rem;
+        }
+        .profile-avatar {
+            width: 100px;
+            height: 100px;
         }
         .profile-stats {
-            gap: 1rem;
-        }
-        .stat-item {
-            min-width: 70px;
-            padding: 0.5rem;
+            grid-template-columns: 1fr;
         }
         .repo-card {
             padding: 1rem;
+        }
+        .repo-name {
+            font-size: 1rem;
+        }
+        .repo-stats {
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .header h1 {
+            font-size: 1.8rem;
+        }
+        .header-icon {
+            font-size: 2.5rem;
+        }
+        .search-section {
+            padding: 1.5rem 1rem;
+        }
+        .search-form {
+            max-width: 100%;
+        }
+        .search-input-group {
+            flex-direction: row;
+            align-items: center;
+        }
+        .search-input {
+            padding: 0.8rem 1rem;
+            font-size: 0.9rem;
+        }
+        .search-btn {
+            padding: 0.8rem 1rem;
+            font-size: 0.8rem;
+        }
+        .profile-section {
+            padding: 1.5rem 1rem;
+        }
+        .profile-avatar {
+            width: 80px;
+            height: 80px;
+        }
+        .repo-card {
+            padding: 1rem;
+        }
+        .repo-name {
+            font-size: 0.95rem;
         }
     }
 </style>
@@ -453,7 +529,7 @@
     <div class="search-form">
         <form method="POST" id="searchForm">
             <div class="search-input-group">
-                <input type="text" name="username" class="search-input" placeholder="Enter GitHub username (e.g., octocat)" required>
+                <input type="text" name="username" class="search-input" placeholder="Enter a itHub username..." required>
                 <button type="submit" class="search-btn">
                     <i class="fas fa-search me-2"></i>Search
                 </button>

@@ -1,6 +1,6 @@
 # GitHub User Finder
 
-A modern, responsive web application for discovering and exploring GitHub users and their profiles. Built with Flask and Bootstrap, featuring a beautiful UI with dark mode support and advanced search capabilities.
+A modern, responsive web application for discovering and exploring GitHub users and their profiles. Built with Flask and Bootstrap, featuring a beautiful UI with glassmorphism effects and advanced search capabilities.
 
 ## 🌟 Features
 
@@ -8,16 +8,15 @@ A modern, responsive web application for discovering and exploring GitHub users 
 - **User Search**: Search for any GitHub user by username
 - **Profile Display**: View detailed user information including bio, stats, and activity
 - **Repository Showcase**: Display user's top repositories with statistics
+- **User Comparison**: Compare multiple GitHub users side by side
 - **Responsive Design**: Works perfectly on desktop, tablet, and mobile devices
 
 ### Advanced Features
-- **Dark Mode Toggle**: Switch between light and dark themes
-- **Language Switcher**: Support for multiple languages (EN/TR)
+- **Glassmorphism UI**: Modern glass effect design with blur and transparency
+- **Real-time Search**: Instant search with GitHub API integration
 - **Caching System**: In-memory caching for faster response times
 - **Error Handling**: Comprehensive error handling and user feedback
-- **Keyboard Shortcuts**: 
-  - `Ctrl/Cmd + K`: Focus search input
-  - `Escape`: Clear search input
+- **Mobile Optimized**: Fully responsive design with mobile-first approach
 
 ### Technical Features
 - **GitHub API Integration**: Real-time data from GitHub REST API
@@ -28,15 +27,15 @@ A modern, responsive web application for discovering and exploring GitHub users 
 ## 🚀 Installation
 
 ### Prerequisites
-- Python 3.7 or higher
+- Python 3.11 or higher
 - pip (Python package installer)
 
-### Setup Instructions
+### Local Setup Instructions
 
 1. **Clone the repository**
    ```bash
-   git clone https://github.com/yourusername/github-user-finder.git
-   cd github-user-finder
+   git clone https://github.com/Erkan3034/Github_Finder_with_Github_Rest_API.git
+   cd Github_Finder_with_Github_Rest_API
    ```
 
 2. **Create virtual environment (recommended)**
@@ -63,6 +62,55 @@ A modern, responsive web application for discovering and exploring GitHub users 
 5. **Open your browser**
    Navigate to `http://localhost:5000`
 
+## 🚀 Railway Deployment
+
+### Prerequisites
+- Railway account (https://railway.app)
+- GitHub repository with your code
+
+### Deployment Steps
+
+1. **Prepare your repository**
+   - Ensure all files are committed to GitHub
+   - Make sure `Procfile`, `requirements.txt`, and `runtime.txt` are in the root directory
+
+2. **Deploy to Railway**
+   - Go to [Railway Dashboard](https://railway.app/dashboard)
+   - Click "New Project"
+   - Select "Deploy from GitHub repo"
+   - Choose your repository
+   - Railway will automatically detect the Python app and deploy it
+
+3. **Environment Variables (Optional)**
+   - Railway automatically sets the `PORT` environment variable
+   - No additional configuration needed for basic deployment
+
+4. **Access your app**
+   - Railway will provide a URL for your deployed application
+   - The app will be accessible at `https://your-app-name.railway.app`
+
+### Railway Configuration Files
+
+The following files are already configured for Railway deployment:
+
+- **`Procfile`**: Specifies how to run the application
+  ```
+  web: gunicorn app:app
+  ```
+
+- **`requirements.txt`**: Lists all Python dependencies
+  ```
+  Flask==2.3.3
+  requests==2.31.0
+  gunicorn==21.2.0
+  ...
+  ```
+
+- **`runtime.txt`**: Specifies Python version
+  ```
+  python-3.11.7
+  ```
+
 ## 📱 Usage
 
 ### Basic Search
@@ -70,10 +118,15 @@ A modern, responsive web application for discovering and exploring GitHub users 
 2. Click "Search" or press Enter
 3. View the user's profile information and repositories
 
+### User Comparison
+1. Navigate to "Compare Users" page
+2. Enter 2-3 GitHub usernames
+3. Click "Compare Users" to see side-by-side comparison
+
 ### Advanced Features
-- **Dark Mode**: Click the moon/sun icon in the top-right corner
-- **Language Switch**: Click the globe icon in the top-left corner
 - **Repository Details**: Click on repository names to view them on GitHub
+- **Profile Links**: Click "View Profile" to visit user's GitHub profile
+- **Responsive Design**: Works seamlessly on all device sizes
 
 ## 🛠️ API Endpoints
 
@@ -98,75 +151,50 @@ A modern, responsive web application for discovering and exploring GitHub users 
 
 ### Repository Information
 - **Top Repositories**: Sorted by stars and forks
-- **Repository Details**: Name, description, language
-- **Statistics**: Stars, forks, watchers
-- **Direct Links**: Quick access to GitHub repositories
+- **Repository Stats**: Stars, forks, language, last updated
+- **Direct Links**: Click to view repositories on GitHub
 
-### Responsive Design
-- **Mobile-First**: Optimized for all screen sizes
-- **Touch-Friendly**: Large buttons and proper spacing
-- **Flexible Layout**: Auto-adjusting grids and components
+### User Comparison
+- **Side-by-side Comparison**: Compare multiple users at once
+- **Statistics Comparison**: Easy comparison of user stats
+- **Repository Comparison**: Compare top repositories
 
-## 🔧 Configuration
+## 🛠️ Technology Stack
 
-### Environment Variables
-Create a `.env` file in the root directory:
-
-```env
-FLASK_SECRET_KEY=your-secret-key-here
-GITHUB_API_TOKEN=your-github-token-optional
-DEBUG=True
-```
-
-### Customization
-- **Colors**: Modify CSS variables in `templates/index.html`
-- **Cache Duration**: Change `CACHE_DURATION` in `app.py`
-- **API Headers**: Update `HEADERS` in `app.py`
-
-## 🐛 Troubleshooting
-
-### Common Issues
-
-1. **ModuleNotFoundError**: Make sure all dependencies are installed
-   ```bash
-   pip install -r requirements.txt
-   ```
-
-2. **Port already in use**: Change the port in `app.py`
-   ```python
-   app.run(debug=True, host='0.0.0.0', port=5001)
-   ```
-
-3. **GitHub API rate limit**: The app includes caching, but you can add a GitHub token for higher limits
-
-### Error Messages
-- **"User not found"**: Check the username spelling
-- **"Network error"**: Check your internet connection
-- **"API error"**: GitHub API might be temporarily unavailable
-
-## 🤝 Contributing
-
-1. Fork the repository
-2. Create a feature branch (`git checkout -b feature/amazing-feature`)
-3. Commit your changes (`git commit -m 'Add amazing feature'`)
-4. Push to the branch (`git push origin feature/amazing-feature`)
-5. Open a Pull Request
+- **Backend**: Flask (Python)
+- **Frontend**: HTML5, CSS3, JavaScript
+- **UI Framework**: Bootstrap 5
+- **Icons**: Font Awesome
+- **Fonts**: Google Fonts (Inter)
+- **Deployment**: Railway
+- **API**: GitHub REST API
 
 ## 📄 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 🙏 Acknowledgments
+## 👨‍💻 Developer
 
-- [GitHub API](https://developer.github.com/v3/) for providing the data
-- [Bootstrap](https://getbootstrap.com/) for the responsive framework
-- [Font Awesome](https://fontawesome.com/) for the icons
-- [Inter Font](https://rsms.me/inter/) for the typography
+**Erkan Turgut**
+- LinkedIn: [Erkan Turgut](https://www.linkedin.com/in/erkanturgut1205)
+- GitHub: [Erkan3034](https://github.com/Erkan3034)
+- Portfolio: [erkanturgut.netlify.app](https://erkanturgut.netlify.app)
+
+## 🤝 Contributing
+
+1. Fork the project
+2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
+3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
+4. Push to the branch (`git push origin feature/AmazingFeature`)
+5. Open a Pull Request
 
 ## 📞 Support
 
-If you have any questions or need help, please open an issue on GitHub or contact the maintainers.
+If you have any questions or need support, please feel free to:
+- Open an issue on GitHub
+- Contact me on LinkedIn
+- Visit my portfolio website
 
 ---
 
-**Made with ❤️ by [Your Name]** 
+**Made with ❤️ by Erkan Turgut** 
